@@ -1,10 +1,10 @@
      // VARIABLES
-// character x and y
+// hero x and y
 var heroX = 100;
 var heroY = 100;
 
 // letter key code variables
-var w = 87; 
+var w = 87;
 var s = 83;
 var a = 65;
 var d = 68;
@@ -24,61 +24,53 @@ var enemyYSpeeds = [];
 var mouseShapeX;
 var mouseShapeY;
 
-var rectangleObject;
 
 
-    // SETUP AND DRAW
+  // SETUP AND DRAW
+// call setup() function to create the game setup
 function setup()
 {
-    // call createCanvas(width, height) function
+    // call createCanvas(width, height) function to create the game canvas
     createCanvas(500, 500);
-
-    // create the rectangle object
-    rectangleObject = new Rectangle(100, 200, 10, 50, 120, 35, 210);
   
-    // call enemyStartSpeed(numEnemies, diameter) function
+    // call enemyStartSpeed(numEnemies, diameter) function to randomly choose a starting speed
     enemyStartSpeed(50, 20);
 
-    // call createHero(x, y) function
+    // call createHero(x, y) function to create the circle hero
     createHero(250, 250);
 }
 
-function draw()
+// call draw() function to repeatedly draw game elements
+function draw() 
 {
-    // call createBackground(r, g, b) function
+    // call createBackground(r, g, b) function to change bg color
     createBackground(100, 25, 100);
- 
-    // call createBorders(thickness) function
+
+    // call createBorders(thickness) function to create borders
     createBorders(10);
 
-    // create and display an object
-    rectangleObject.display();
-
-    // call createExit(size, message) function
+    // call createExit(size, message) function to create the exit
     createExit(16, "Run Here!");
 
-    // call exitCheck(size, winMessage) function
+    // call exitCheck(size, winMessage) function to display exit message
     exitCheck(30, "You're Saved!");
-  
-    // call drawHero(diameter) function
-    drawHero(30);
-  
-    // call heroMovement(distance) function
-    heroMovement(3);
-  
-    // call drawEnemies() function
-    drawEnemies();
-  
-    // call enemyMovement() function
-    enemyMovement();
 
-    // call mouseShape(diameter) function
+    // call drawHero(r, g, b, diameter) function to draw hero
+    drawHero(75, 100, 250, 30);
+
+    // call heroMovement(distance) function to move hero
+    heroMovement(3);
+
+    // call enemies() function to draw, move and boundary check enemies
+    enemies();  
+  
+    // call mouseShape(diameter) function to draw shape upon mouse click
     mouseShape(5);
 }
 
 
 
-    // ENVIRONMENT FUNCTIONS
+// ENVIRONMENT FUNCTIONS
 function createBackground(r, g, b)
 {
     background(r, g, b);
@@ -100,7 +92,7 @@ function createBorders(thickness)
 
 
 
-      // EXIT FUNCTIONS
+  // EXIT FUNCTIONS
 function createExit(size, message)
 {
     // exit message
@@ -109,7 +101,7 @@ function createExit(size, message)
     text(message, width - 485, height - 475)
 }
 
-function exitCheck(winMessage)
+function exitCheck(size, winMessage)
 {
     // exit check!
     if((heroX <= 5) && (heroY <= 50))
@@ -123,7 +115,7 @@ function exitCheck(winMessage)
 
 
 
-      // HERO FUNCTIONS
+  // HERO FUNCTIONS
 function createHero(x,y)
 {
     // hero x and y
@@ -132,9 +124,9 @@ function createHero(x,y)
     console.log(heroX);
 }
 
-function drawHero(diameter)
+function drawHero(r, g, b, diameter)
 {
-    fill(75, 100, 250);
+    fill(r, g, b);
     circle(heroX, heroY, diameter);
 }
 
@@ -161,57 +153,59 @@ function heroMovement(distance)
 
 
 
-      // ENEMY FUNCTIONS
+  // ENEMY FUNCTIONS
 function enemyStartSpeed(numEnemies, diameter)
 {
     // get a random speed at start of game
-for (var i = 0; i < numEnemies; i++) {
+	for (var i = 0; i < numEnemies; i++) 
+    {
     enemyXSpeeds[i] = Math.floor(Math.random() * (Math.floor(Math.random() * 5)) + 1);
     enemyYSpeeds[i] = Math.floor(Math.random() * (Math.floor(Math.random() * 5)) + 1);
     enemyXs[i] = getRandomNumber(500);
     enemyYs[i] = getRandomNumber(500);
     diameters[i] = getRandomNumber(diameter);
-  }
+    }
 }
 
-function drawEnemies()
+function enemies()
 {
-    // enemy color
+    // enemy color fill(r, g, b)
     fill(255, 150, 200);
   
     // for loop to create enemies
-    for (var i = 0; i < enemyXs.length; i++) {
+    for (var i = 0; i < enemyXs.length; i++) 
+    {
         circle(enemyXs[i], enemyYs[i], diameters[i]);
         enemyXSpeeds[i] = Math.floor(Math.random() * (Math.floor(Math.random() * 5)) + 1);
         enemyYSpeeds[i] = Math.floor(Math.random() * (Math.floor(Math.random() * 5)) + 1);
-    }   
+
+        // move the enemies
+        enemyXs[i] += enemyXSpeeds[i];
+        enemyYs[i] += enemyYSpeeds[i];
+      
+        // enemy boundary check
+        if (enemyXs[i] > width) 
+        {
+            enemyXs[i] = 0;
+        }
+        if (enemyXs[i] < 0) 
+        {
+            enemyXs[i] = width;
+        }
+        if (enemyYs[i] > height) 
+        {
+            enemyYs[i] = 0;
+        }
+        if (enemyYs[i] < 0) 
+        {
+            enemyYs[i] = height;
+        }
+    }
 }
 
-function enemyMovement()
-{
-    // move the enemies
-    enemyXs[i] += enemyXSpeeds[i];
-    enemyYs[i] += enemyYSpeeds[i];
-    
-    // enemy boundary check
-    if (enemyXs[i] > width) {
-        enemyXs[i] = 0;
-    }
-    if (enemyXs[i] < 0) {
-        enemyXs[i] = width;
-    }
-    if (enemyYs[i] > height) {
-        enemyYs[i] = 0;
-    }
-    if (enemyYs[i] < 0) {
-        enemyYs[i] = height;
-    }    
-}
 
 
-
-
-    // MOUSE CLICK FUNCTIONS
+// MOUSE CLICK FUNCTIONS
 function mouseShape(diameter)
 {
     // create mouse click shape
@@ -231,7 +225,7 @@ function getRandomNumber(number) {
 
 
 
-      // RESERVE FUNCTIONS
+// RESERVE FUNCTIONS
 /*
 function keyPressed() 
   {
